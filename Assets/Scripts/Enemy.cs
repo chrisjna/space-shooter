@@ -23,7 +23,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Player")
         {
@@ -33,7 +33,6 @@ public class Enemy : MonoBehaviour
                 player.Damage();
             }
             Destroy(this.gameObject);
-            Debug.Log("hit");
         }
 
         if (other.tag == "Laser")
