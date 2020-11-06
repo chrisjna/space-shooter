@@ -7,18 +7,27 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField]
     private float _speed = 3.5f;
+    private float _speedMultiplier = 2;
+    
     [SerializeField]
     private GameObject _laserPrefab;
     [SerializeField]
     private float _fireRate = 0.5f;
     private float _canFire = -1f;
+    
     [SerializeField]
     private int _lives = 3;
     private SpawnManager _spawnManager;
+    
     [SerializeField]
     private GameObject _tripleShotPrefab;
     [SerializeField]
     private bool _isTripleShotActive = false;
+    private bool _isSpeedBoostActive = false;
+    private bool _isShieldActive = false;
+    
+    [SerializeField]
+    private GameObject _shieldVisualizer;
 
     void Start()
     {
@@ -46,7 +55,7 @@ public class Player : MonoBehaviour
         float verticalInput = Input.GetAxis("Vertical");
 
         Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
-
+        
         transform.Translate(direction * _speed * Time.deltaTime);
 
         transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 0), 0);
@@ -76,6 +85,12 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
+        if (_isShieldActive == true)
+        {
+            _isShieldActive = false;
+            _shieldVisualizer.SetActive(false);
+            return;
+        }
         _lives--;
 
         if(_lives < 1)
@@ -95,5 +110,25 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(5.0f);
         _isTripleShotActive = false;
+    }
+
+    public void SpeedBoostActive()
+    {
+        _isSpeedBoostActive = true;
+        _speed = _speed * _speedMultiplier;
+        StartCoroutine(SpeedBoostPowerDownRoutine());
+    }
+
+    IEnumerator SpeedBoostPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(5.0f);
+        _isSpeedBoostActive = false;
+        _speed = _speed / _speedMultiplier;
+    }
+
+    public void ShieldsActive()
+    {
+        _isShieldActive = true;
+        _shieldVisualizer.SetActive(true);
     }
 }
