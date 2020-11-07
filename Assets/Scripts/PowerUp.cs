@@ -6,8 +6,8 @@ public class PowerUp : MonoBehaviour
 {
     // Start is called before the first frame update
     private float _speed = 3.0f;
-    [SerializeField] // 0 = 
-    private int powerupID;
+    [SerializeField]
+    private int powerupID = 0;
     void Start()
     {
         

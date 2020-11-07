@@ -5,38 +5,33 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField]
-    private float _speed = 3.5f;
+    [SerializeField] private float _speed = 3.5f;
     private float _speedMultiplier = 2;
-    
-    [SerializeField]
-    private GameObject _laserPrefab;
-    [SerializeField]
-    private float _fireRate = 0.5f;
+    [SerializeField] private GameObject _laserPrefab;
+    [SerializeField] private float _fireRate = 0.5f;
     private float _canFire = -1f;
-    
-    [SerializeField]
-    private int _lives = 3;
+    [SerializeField] private int _lives = 3;
     private SpawnManager _spawnManager;
-    
-    [SerializeField]
-    private GameObject _tripleShotPrefab;
-    [SerializeField]
-    private bool _isTripleShotActive = false;
-    private bool _isSpeedBoostActive = false;
+    [SerializeField] private GameObject _tripleShotPrefab;
+    [SerializeField] private bool _isTripleShotActive = false;
     private bool _isShieldActive = false;
-    
-    [SerializeField]
-    private GameObject _shieldVisualizer;
+    [SerializeField] private GameObject _shieldVisualizer;
+    private int _score = 0;
+    private UIManager _uiManager;
 
     void Start()
     {
         transform.position = new Vector3(0, -3, 0);
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         if(_spawnManager == null)
         {
             Debug.LogError("Spawn Manager is NULL");
-        } 
+        }
+        if(_uiManager == null)
+        {
+            Debug.Log("UI manager missing");
+        }
     }
 
     // Update is called once per frame
@@ -93,6 +88,8 @@ public class Player : MonoBehaviour
         }
         _lives--;
 
+        _uiManager.UpdateLives(_lives);
+
         if(_lives < 1)
         {
             _spawnManager.OnPlayerDeath();
@@ -114,7 +111,6 @@ public class Player : MonoBehaviour
 
     public void SpeedBoostActive()
     {
-        _isSpeedBoostActive = true;
         _speed = _speed * _speedMultiplier;
         StartCoroutine(SpeedBoostPowerDownRoutine());
     }
@@ -122,7 +118,6 @@ public class Player : MonoBehaviour
     IEnumerator SpeedBoostPowerDownRoutine()
     {
         yield return new WaitForSeconds(5.0f);
-        _isSpeedBoostActive = false;
         _speed = _speed / _speedMultiplier;
     }
 
@@ -130,5 +125,11 @@ public class Player : MonoBehaviour
     {
         _isShieldActive = true;
         _shieldVisualizer.SetActive(true);
+    }
+
+    public void AddScore(int points)
+    {
+        _score = _score + points;
+        _uiManager.UpdateScore(_score);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
@@ -12,8 +13,12 @@ public class SpawnManager : MonoBehaviour
     private GameObject _enemyContainer;
     [SerializeField]
     private GameObject[] powerups;
+    [SerializeField]
+    private GameObject _ouchPrefab;
+    private float _timer = 0;
 
     private bool _stopSpawning = false;
+    private bool _ouchIsDead = true;
     void Start()
     {
         StartCoroutine(SpawnEnemyRoutine());
@@ -23,7 +28,13 @@ public class SpawnManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(_ouchIsDead)
+        {
+            _timer += Time.deltaTime;
+        } else
+        {
+            _timer = 0;
+        }
     }
 
     IEnumerator SpawnEnemyRoutine()
@@ -33,6 +44,12 @@ public class SpawnManager : MonoBehaviour
             Vector3 posToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
             GameObject newEnemy = Instantiate(_enemyPrefab, posToSpawn, Quaternion.identity);
             newEnemy.transform.parent = _enemyContainer.transform;
+            if (_ouchIsDead && _timer > 20)
+            {
+                Vector3 ouchToSpawn = new Vector3(Random.Range(-8f, 8f), 4, 0);
+                Instantiate(_ouchPrefab, ouchToSpawn, Quaternion.identity);
+                _ouchIsDead = false;
+            }
             yield return new WaitForSeconds(5.0f);
         }
     }
@@ -50,5 +67,10 @@ public class SpawnManager : MonoBehaviour
     public void OnPlayerDeath()
     {
         _stopSpawning = true;
+    }
+
+    public void OuchEnemyDied()
+    {
+        _ouchIsDead = true;
     }
 }
