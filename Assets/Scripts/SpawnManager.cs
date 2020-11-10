@@ -21,11 +21,15 @@ public class SpawnManager : MonoBehaviour
     private bool _ouchIsDead = true;
     void Start()
     {
-        StartCoroutine(SpawnEnemyRoutine());
-        StartCoroutine(SpawnPowerUpRoutine());
+        Invoke("Spawn", 3);
     }
 
     // Update is called once per frame
+    void Spawn()
+    {
+        StartCoroutine(SpawnEnemyRoutine());
+        StartCoroutine(SpawnPowerUpRoutine());
+    }
     void Update()
     {
         if(_ouchIsDead)

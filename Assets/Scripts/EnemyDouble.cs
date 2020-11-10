@@ -20,11 +20,13 @@ public class EnemyDouble : MonoBehaviour
 
     private SpawnManager _spawnManager;
     private Animator _anim;
+    private Collider2D _collider;
 
     Player _player;
 
     [SerializeField] private AudioClip _explosionSoundClip;
     private AudioSource _audioSource;
+    private bool _isDead = false;
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +34,7 @@ public class EnemyDouble : MonoBehaviour
         _player = GameObject.Find("Player").GetComponent<Player>();
         _audioSource = GetComponent<AudioSource>();
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+        _collider = gameObject.GetComponent<Collider2D>();
 
         latestDirectionChangeTime = 0f;
         CalculateMovement();
@@ -59,19 +62,26 @@ public class EnemyDouble : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _timer += Time.deltaTime;
-        if (Time.time - latestDirectionChangeTime > directionChangeTime)
+        if (_isDead)
         {
-            latestDirectionChangeTime = Time.time;
-            CalculateMovement();
+            _speed = 0;
         }
-        if (_timer > 12)
+        else
         {
-            FireOuch();
-            _timer = 0;
+            _timer += Time.deltaTime;
+            if (Time.time - latestDirectionChangeTime > directionChangeTime)
+            {
+                latestDirectionChangeTime = Time.time;
+                CalculateMovement();
+            }
+            if (_timer > 12)
+            {
+                FireOuch();
+                _timer = 0;
+            }
+            transform.position = new Vector2(Mathf.Clamp(transform.position.x + (movementPerSecond.x * Time.deltaTime), -8, 8),
+                Mathf.Clamp(transform.position.y + (movementPerSecond.y * Time.deltaTime), 4, 5));
         }
-        transform.position = new Vector2(Mathf.Clamp(transform.position.x + (movementPerSecond.x * Time.deltaTime), -8, 8),
-            Mathf.Clamp(transform.position.y + (movementPerSecond.y * Time.deltaTime), 4, 5));
     }
 
     void CalculateMovement()
@@ -110,21 +120,21 @@ public class EnemyDouble : MonoBehaviour
             _anim.SetTrigger("OnEnemyDeath");
             _audioSource.Play();
             Destroy(this.gameObject, 2.6f);
-            this.gameObject.GetComponent<Collider2D>().enabled = false;
+            _collider.enabled = false;
         }
 
         if (other.CompareTag("Laser"))
         {
             if (hp < 1)
             {
+                _isDead = true;
                 _player.AddScore(100);
                 _timer = 0;
-                _speed = 0;
                 _spawnManager.OuchEnemyDied();
+                _collider.enabled = false;
                 _anim.SetTrigger("OnEnemyDeath");
                 _audioSource.Play();
                 Destroy(this.gameObject, 2.6f);
-                this.gameObject.GetComponent<Collider2D>().enabled = false;
             }
             else
             {

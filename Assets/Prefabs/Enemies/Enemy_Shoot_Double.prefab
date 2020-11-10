@@ -148,7 +148,7 @@ MonoBehaviour:
   NumberOfProjectiles: 5
   BulletForce: 1
   SpreadAngle: 140
-  hp: 50
+  hp: 1
   _ouchPrefab: {fileID: 6730215950459946921, guid: b47722d504f8fcb44acfd6f5c50f8929,
     type: 3}
   _explosionSoundClip: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}

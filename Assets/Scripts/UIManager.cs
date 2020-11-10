@@ -11,13 +11,17 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Sprite[] _livesSprite;
     [SerializeField] private Text _gameOverText;
     [SerializeField] private Text _restartText;
+    [SerializeField] private Text _startText;
     private GameManager _gameManager;
+    
     // Start is called before the first frame update
     void Start()
     {
         _scoreText.text = "Score: " + 0;
         _gameOverText.gameObject.SetActive(false);
         _restartText.gameObject.SetActive(false);
+        _startText.gameObject.SetActive(true);
+
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
         if (_gameManager == null)
         {
@@ -28,9 +32,13 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Invoke("StartSequence", 3);
     }
 
+    void StartSequence()
+    {
+        _startText.gameObject.SetActive(false);
+    }
     public void UpdateScore(int playerScore)
     {
         _scoreText.text = "Score: " + playerScore.ToString();
