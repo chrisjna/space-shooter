@@ -6,8 +6,7 @@ public class EnemyDouble : MonoBehaviour
 {
     [SerializeField] private int NumberOfProjectiles = 3;
     [SerializeField] private float BulletForce = 2f;
-    [Range(0, 360)]
-    [SerializeField] private float SpreadAngle = 20;
+    [Range(0, 360)] [SerializeField] private float SpreadAngle = 20;
    
     [SerializeField] private float hp = 25;
     [SerializeField] private GameObject _ouchPrefab;
@@ -20,16 +19,26 @@ public class EnemyDouble : MonoBehaviour
     private float _timer = 5;
 
     private SpawnManager _spawnManager;
+    private Animator _anim;
+
+    Player _player;
 
     // Start is called before the first frame update
     void Start()
     {
+        _player = GameObject.Find("Player").GetComponent<Player>();
         latestDirectionChangeTime = 0f;
         CalculateMovement();
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         if (_spawnManager == null)
         {
             Debug.LogError("Spawn Manager is NULL");
+        }
+
+        _anim = GetComponent<Animator>();
+        if (_anim == null)
+        {
+            Debug.LogError("animator is null");
         }
     }
 
@@ -42,7 +51,7 @@ public class EnemyDouble : MonoBehaviour
             latestDirectionChangeTime = Time.time;
             CalculateMovement();
         }
-        if (_timer > 10)
+        if (_timer > 12)
         {
             FireOuch();
             _timer = 0;
@@ -59,7 +68,7 @@ public class EnemyDouble : MonoBehaviour
 
     void FireOuch()
     {
-        // reference to https://www.reddit.com/r/Unity2D/comments/gh9rrf/how_can_i_create_a_bullet_spread_in_2d/
+        // Reference and credit to https://www.reddit.com/r/Unity2D/comments/gh9rrf/how_can_i_create_a_bullet_spread_in_2d/
         float angleStep = SpreadAngle / NumberOfProjectiles;
         float centeringOffset = (SpreadAngle / 2) - (angleStep / 2);                                                                                                                       //centered on the mouse cursor
 
@@ -80,20 +89,26 @@ public class EnemyDouble : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Player player = other.transform.GetComponent<Player>();
-            if (player != null)
+            if (_player != null)
             {
-                Destroy(player);
+                Destroy(_player);
             }
-            Destroy(this.gameObject);
+            _anim.SetTrigger("OnEnemyDeath");
+            Destroy(this.gameObject, 2.6f);
+            this.gameObject.GetComponent<Collider2D>().enabled = false;
         }
 
         if (other.CompareTag("Laser"))
         {
             if (hp < 1)
             {
-                Destroy(this.gameObject);
+                _player.AddScore(100);
+                _timer = 0;
+                _speed = 0;
                 _spawnManager.OuchEnemyDied();
+                _anim.SetTrigger("OnEnemyDeath");
+                Destroy(this.gameObject, 2.6f);
+                this.gameObject.GetComponent<Collider2D>().enabled = false;
             }
             else
             {

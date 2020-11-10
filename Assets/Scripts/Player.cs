@@ -18,6 +18,8 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject _shieldVisualizer;
     private int _score = 0;
     private UIManager _uiManager;
+    [SerializeField] private GameObject _rightEngine, _leftEngine;
+    [SerializeField] private GameObject _thruster;
 
     void Start()
     {
@@ -88,6 +90,14 @@ public class Player : MonoBehaviour
         }
         _lives--;
 
+        if (_lives == 2)
+        {
+            _leftEngine.SetActive(true);
+        }
+        if (_lives == 1){
+            _rightEngine.SetActive(false);
+        }
+
         _uiManager.UpdateLives(_lives);
 
         if(_lives < 1)
@@ -111,6 +121,7 @@ public class Player : MonoBehaviour
 
     public void SpeedBoostActive()
     {
+        _thruster.SetActive(true);
         _speed = _speed * _speedMultiplier;
         StartCoroutine(SpeedBoostPowerDownRoutine());
     }
@@ -118,6 +129,7 @@ public class Player : MonoBehaviour
     IEnumerator SpeedBoostPowerDownRoutine()
     {
         yield return new WaitForSeconds(5.0f);
+        _thruster.SetActive(false);
         _speed = _speed / _speedMultiplier;
     }
 

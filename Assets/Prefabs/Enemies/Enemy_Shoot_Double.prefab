@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3395122687859163069}
   - component: {fileID: 8695834647208389979}
   - component: {fileID: 4599216590976864600}
+  - component: {fileID: 7641153143397946044}
   m_Layer: 0
   m_Name: Enemy_Shoot_Double
   m_TagString: Enemy
@@ -149,3 +150,22 @@ MonoBehaviour:
   hp: 50
   _ouchPrefab: {fileID: 6730215950459946921, guid: b47722d504f8fcb44acfd6f5c50f8929,
     type: 3}
+--- !u!95 &7641153143397946044
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7357391620188280767}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 85a5cb5b6e6482b49ad5bdfbbc24c986, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
