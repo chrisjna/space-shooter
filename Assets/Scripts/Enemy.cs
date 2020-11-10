@@ -10,13 +10,24 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float _rotateSpeed = 20.0f;
     Player _player;
     private Animator _anim;
+    [SerializeField] private AudioClip _explosionSoundClip;
+    private AudioSource _audioSource;
     void Start()
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
         _anim = GetComponent<Animator>();
+        _audioSource = GetComponent<AudioSource>();
         if (_anim == null)
         {
             Debug.LogError("animator is null");
+        }
+        if (_audioSource == null)
+        {
+            Debug.Log("Audio is missing");
+        }
+        else
+        {
+            _audioSource.clip = _explosionSoundClip;
         }
     }
 
@@ -42,6 +53,7 @@ public class Enemy : MonoBehaviour
                 player.Damage();
             }
             _anim.SetTrigger("OnAsteroidDeath");
+            _audioSource.Play();
             _speed = 0;
             Destroy(this.gameObject, 2.1f);
             this.gameObject.GetComponent<Collider2D>().enabled = false;
@@ -54,6 +66,7 @@ public class Enemy : MonoBehaviour
             {
                 _player.AddScore(10);
                 _anim.SetTrigger("OnAsteroidDeath");
+                _audioSource.Play();
                 _speed = 0;
                 Destroy(this.gameObject, 2.1f);
                 this.gameObject.GetComponent<Collider2D>().enabled = false;

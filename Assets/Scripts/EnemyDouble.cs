@@ -23,13 +23,19 @@ public class EnemyDouble : MonoBehaviour
 
     Player _player;
 
+    [SerializeField] private AudioClip _explosionSoundClip;
+    private AudioSource _audioSource;
+
     // Start is called before the first frame update
     void Start()
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
+        _audioSource = GetComponent<AudioSource>();
+        _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+
         latestDirectionChangeTime = 0f;
         CalculateMovement();
-        _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+
         if (_spawnManager == null)
         {
             Debug.LogError("Spawn Manager is NULL");
@@ -39,6 +45,14 @@ public class EnemyDouble : MonoBehaviour
         if (_anim == null)
         {
             Debug.LogError("animator is null");
+        }
+        if (_audioSource == null)
+        {
+            Debug.Log("Audio is missing");
+        }
+        else
+        {
+            _audioSource.clip = _explosionSoundClip;
         }
     }
 
@@ -94,6 +108,7 @@ public class EnemyDouble : MonoBehaviour
                 Destroy(_player);
             }
             _anim.SetTrigger("OnEnemyDeath");
+            _audioSource.Play();
             Destroy(this.gameObject, 2.6f);
             this.gameObject.GetComponent<Collider2D>().enabled = false;
         }
@@ -107,6 +122,7 @@ public class EnemyDouble : MonoBehaviour
                 _speed = 0;
                 _spawnManager.OuchEnemyDied();
                 _anim.SetTrigger("OnEnemyDeath");
+                _audioSource.Play();
                 Destroy(this.gameObject, 2.6f);
                 this.gameObject.GetComponent<Collider2D>().enabled = false;
             }

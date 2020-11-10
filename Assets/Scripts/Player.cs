@@ -20,12 +20,15 @@ public class Player : MonoBehaviour
     private UIManager _uiManager;
     [SerializeField] private GameObject _rightEngine, _leftEngine;
     [SerializeField] private GameObject _thruster;
+    [SerializeField] private AudioClip _laserSoundClip;
+    private AudioSource _audioSource;
 
     void Start()
     {
         transform.position = new Vector3(0, -3, 0);
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _audioSource = GetComponent<AudioSource>();
         if(_spawnManager == null)
         {
             Debug.LogError("Spawn Manager is NULL");
@@ -33,6 +36,14 @@ public class Player : MonoBehaviour
         if(_uiManager == null)
         {
             Debug.Log("UI manager missing");
+        }
+
+        if(_audioSource == null)
+        {
+            Debug.Log("Audio is missing");
+        } else
+        {
+            _audioSource.clip = _laserSoundClip;
         }
     }
 
@@ -78,6 +89,8 @@ public class Player : MonoBehaviour
         {
             Instantiate(_laserPrefab, transform.position + new Vector3(0, 0.8f, 0), Quaternion.identity);
         }
+
+        _audioSource.Play();
     }
 
     public void Damage()
