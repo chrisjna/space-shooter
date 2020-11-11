@@ -41,8 +41,11 @@ public class PowerUp : MonoBehaviour
                     case 2:
                         player.ShieldsActive();
                         break;
+                    case 3:
+                        player.HealthIncrease();
+                        break;
                     default:
-                        Debug.Log("why");
+                        Debug.Log("Powerup broke");
                         break;
                 }
             }

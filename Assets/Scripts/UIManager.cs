@@ -12,12 +12,14 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Text _gameOverText;
     [SerializeField] private Text _restartText;
     [SerializeField] private Text _startText;
+    [SerializeField] private Text _ammo;
     private GameManager _gameManager;
     
     // Start is called before the first frame update
     void Start()
     {
         _scoreText.text = "Score: " + 0;
+        _ammo.text = "Ammo: " + 15;
         _gameOverText.gameObject.SetActive(false);
         _restartText.gameObject.SetActive(false);
         _startText.gameObject.SetActive(true);
@@ -38,6 +40,10 @@ public class UIManager : MonoBehaviour
     void StartSequence()
     {
         _startText.gameObject.SetActive(false);
+    }
+    public void UpdateAmmo(int ammo)
+    {
+        _ammo.text = "Ammo: " + ammo.ToString();
     }
     public void UpdateScore(int playerScore)
     {
