@@ -10,14 +10,15 @@ public class Player : MonoBehaviour
     [SerializeField] private float _fireRate = 0.5f;
     [SerializeField] private int _lives = 3;
     [SerializeField] private GameObject _tripleShotPrefab;
-    [SerializeField] private bool _isTripleShotActive = false;
+    private bool _isTripleShotActive = false;
     [SerializeField] private GameObject _shieldVisualizer1, _shieldVisualizer2, _shieldVisualizer3;
     [SerializeField] private GameObject _rightEngine, _leftEngine;
     [SerializeField] private GameObject _thruster;
     [SerializeField] private GameObject _boostOn;
     [SerializeField] private AudioClip _laserSoundClip;
+    private bool _missileOn;
     private SpawnManager _spawnManager;
-    private int _ammoCount = 15;
+    private float _ammoCount = Mathf.Infinity;
     private float _speedMultiplier = 2;
     private float _shieldHealth = 0;
     private float _canFire = -1f;
@@ -31,6 +32,7 @@ public class Player : MonoBehaviour
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _audioSource = GetComponent<AudioSource>();
+
         if (_spawnManager == null)
         {
             Debug.LogError("Spawn Manager is NULL");
@@ -101,7 +103,19 @@ public class Player : MonoBehaviour
             {
                 Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
             }
-            else
+            else if (_missileOn == true)
+            {
+                float angleStep = 120 / 5;
+                float centeringOffset = (120 / 2) - (angleStep / 2);                                                                                                                       //centered on the mouse cursor
+                for (int i = 0; i < 5; i++)
+                {
+                    float currentBulletAngle = angleStep * i;
+                    Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, currentBulletAngle - centeringOffset));
+                    GameObject bullet = Instantiate(_laserPrefab, transform.position + new Vector3(0, 0.8f, 0), rotation);
+                    Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+                    rb.AddForce(bullet.transform.up * -1.0f * 1f, ForceMode2D.Impulse);
+                }
+            } else
             {
                 Instantiate(_laserPrefab, transform.position + new Vector3(0, 0.8f, 0), Quaternion.identity);
             }
@@ -210,6 +224,17 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void MissileActive()
+    {
+        _missileOn = true;
+        StartCoroutine(MissilePowerDownRoutine());
+    }
+
+    IEnumerator MissilePowerDownRoutine()
+    {
+        yield return new WaitForSeconds(5.0f);
+        _missileOn = false;
+    }
     public void AddScore(int points)
     {
         _score = _score + points;

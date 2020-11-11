@@ -44,6 +44,9 @@ public class PowerUp : MonoBehaviour
                     case 3:
                         player.HealthIncrease();
                         break;
+                    case 4:
+                        player.MissileActive();
+                        break;
                     default:
                         Debug.Log("Powerup broke");
                         break;

@@ -19,7 +19,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         _scoreText.text = "Score: " + 0;
-        _ammo.text = "Ammo: " + 15;
+        _ammo.text = "Ammo: " + Mathf.Infinity;
         _gameOverText.gameObject.SetActive(false);
         _restartText.gameObject.SetActive(false);
         _startText.gameObject.SetActive(true);
@@ -41,7 +41,7 @@ public class UIManager : MonoBehaviour
     {
         _startText.gameObject.SetActive(false);
     }
-    public void UpdateAmmo(int ammo)
+    public void UpdateAmmo(float ammo)
     {
         _ammo.text = "Ammo: " + ammo.ToString();
     }
