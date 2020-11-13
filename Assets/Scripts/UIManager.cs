@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Text _restartText;
     [SerializeField] private Text _startText;
     [SerializeField] private Text _ammo;
+    [SerializeField] private Image _timer;
     private GameManager _gameManager;
     
     // Start is called before the first frame update
@@ -23,6 +24,7 @@ public class UIManager : MonoBehaviour
         _gameOverText.gameObject.SetActive(false);
         _restartText.gameObject.SetActive(false);
         _startText.gameObject.SetActive(true);
+        _timer.gameObject.SetActive(false);
 
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
         if (_gameManager == null)
@@ -58,6 +60,17 @@ public class UIManager : MonoBehaviour
         {
             GameOverSequence();
         }
+    }
+
+    public void PowerUpCollected()
+    {
+        _timer.gameObject.SetActive(true);
+        StartCoroutine(PowerUpEndTimer());
+    }
+    IEnumerator PowerUpEndTimer()
+    {
+        yield return new WaitForSeconds(5.0f);
+        _timer.gameObject.SetActive(false);
     }
 
     void GameOverSequence()

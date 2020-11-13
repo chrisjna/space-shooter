@@ -8,20 +8,16 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField]
-    private GameObject _enemyPrefab;
-    [SerializeField]
-    private GameObject _enemyContainer;
-    [SerializeField]
-    private GameObject[] powerups;
-    [SerializeField]
-    private GameObject _ouchPrefab;
+    [SerializeField] private GameObject _asteroidPrefab;
+    [SerializeField] private GameObject _enemyContainer;
+    [SerializeField] private GameObject _enemyPrefab;
+    [SerializeField] private GameObject[] powerups;
+
     private float _timer = 0;
     private float _timer2 = 0;
-    private int counter;
 
     private bool _stopSpawning = false;
-    private bool _ouchIsDead = true;
+    private bool _enemyIsDead = true;
     void Start()
     {
         Invoke("Spawn", 3);
@@ -36,7 +32,7 @@ public class SpawnManager : MonoBehaviour
     void Update()
     {
         _timer2 += Time.deltaTime;
-        if (_ouchIsDead)
+        if (_enemyIsDead)
         {
             _timer += Time.deltaTime;
         } else
@@ -50,13 +46,13 @@ public class SpawnManager : MonoBehaviour
         while (_stopSpawning == false)
         {
             Vector3 posToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
-            GameObject newEnemy = Instantiate(_enemyPrefab, posToSpawn, Quaternion.identity);
+            GameObject newEnemy = Instantiate(_asteroidPrefab, posToSpawn, Quaternion.identity);
             newEnemy.transform.parent = _enemyContainer.transform;
-            if (_ouchIsDead && _timer > 20)
+            if (_enemyIsDead && _timer > 20)
             {
-                Vector3 ouchToSpawn = new Vector3(Random.Range(-8f, 8f), 4, 0);
-                Instantiate(_ouchPrefab, ouchToSpawn, Quaternion.identity);
-                _ouchIsDead = false;
+                Vector3 enemyToSpawn = new Vector3(Random.Range(-8f, 8f), 4, 0);
+                Instantiate(_enemyPrefab, enemyToSpawn, Quaternion.identity);
+                _enemyIsDead = false;
             }
             yield return new WaitForSeconds(5.0f);
         }
@@ -86,8 +82,8 @@ public class SpawnManager : MonoBehaviour
         _stopSpawning = true;
     }
 
-    public void OuchEnemyDied()
+    public void EnemyDied()
     {
-        _ouchIsDead = true;
+        _enemyIsDead = true;
     }
 }

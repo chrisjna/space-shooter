@@ -10,29 +10,38 @@ public class Player : MonoBehaviour
     [SerializeField] private float _fireRate = 0.5f;
     [SerializeField] private int _lives = 3;
     [SerializeField] private GameObject _tripleShotPrefab;
-    private bool _isTripleShotActive = false;
     [SerializeField] private GameObject _shieldVisualizer1, _shieldVisualizer2, _shieldVisualizer3;
     [SerializeField] private GameObject _rightEngine, _leftEngine;
     [SerializeField] private GameObject _thruster;
     [SerializeField] private GameObject _boostOn;
     [SerializeField] private AudioClip _laserSoundClip;
+
     private bool _missileOn;
-    private SpawnManager _spawnManager;
+    private bool _isTripleShotActive = false;
     private float _ammoCount = Mathf.Infinity;
     private float _speedMultiplier = 2;
     private float _shieldHealth = 0;
     private float _canFire = -1f;
     private int _score = 0;
+    private bool _powerUpActive = false;
+
+    private SpawnManager _spawnManager;
     private UIManager _uiManager;
     private AudioSource _audioSource;
+    private ShakeBehavior _cameraManager;
 
     void Start()
     {
         transform.position = new Vector3(0, -3, 0);
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _cameraManager = GameObject.Find("Main Camera").GetComponent<ShakeBehavior>();
         _audioSource = GetComponent<AudioSource>();
-
+        
+        if (_cameraManager == null)
+        {
+            Debug.LogError("No camera");
+        }
         if (_spawnManager == null)
         {
             Debug.LogError("Spawn Manager is NULL");
@@ -128,12 +137,12 @@ public class Player : MonoBehaviour
     {
         if (_shieldHealth >= 1)
         {
-            if (_shieldVisualizer3.active == true)
+            if (_shieldVisualizer3.activeInHierarchy == true)
             {
                 _shieldVisualizer2.SetActive(true);
                 _shieldVisualizer3.SetActive(false);
             }
-            else if (_shieldVisualizer2.active == true)
+            else if (_shieldVisualizer2.activeInHierarchy == true)
             {
                 _shieldVisualizer1.SetActive(true);
                 _shieldVisualizer2.SetActive(false);
@@ -148,9 +157,11 @@ public class Player : MonoBehaviour
         if (_lives == 2)
         {
             _leftEngine.SetActive(true);
+            _cameraManager.TriggerShake();
         }
         if (_lives == 1){
             _rightEngine.SetActive(true);
+            _cameraManager.TriggerShake();
         }
 
         _uiManager.UpdateLives(_lives);
@@ -164,21 +175,32 @@ public class Player : MonoBehaviour
 
     public void TripleShotActive()
     {
-        _isTripleShotActive = true;
-        StartCoroutine(TripleShotPowerDownRoutine());
+        if (!_powerUpActive)
+        {
+            _powerUpActive = true;
+            _uiManager.PowerUpCollected();
+            _isTripleShotActive = true;
+            StartCoroutine(TripleShotPowerDownRoutine());
+        }
     }
 
     IEnumerator TripleShotPowerDownRoutine()
     {
         yield return new WaitForSeconds(5.0f);
         _isTripleShotActive = false;
+        _powerUpActive = false;
     }
 
     public void SpeedBoostActive()
     {
-        _thruster.SetActive(true);
-        _speed = _speed * _speedMultiplier;
-        StartCoroutine(SpeedBoostPowerDownRoutine());
+        if (!_powerUpActive)
+        {
+            _powerUpActive = true;
+            _uiManager.PowerUpCollected();
+            _thruster.SetActive(true);
+            _speed = _speed * _speedMultiplier;
+            StartCoroutine(SpeedBoostPowerDownRoutine());
+        }
     }
 
     IEnumerator SpeedBoostPowerDownRoutine()
@@ -186,6 +208,7 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(5.0f);
         _thruster.SetActive(false);
         _speed = _speed / _speedMultiplier;
+        _powerUpActive = false;
     }
 
     public void ShieldsActive()
@@ -226,14 +249,20 @@ public class Player : MonoBehaviour
 
     public void MissileActive()
     {
-        _missileOn = true;
-        StartCoroutine(MissilePowerDownRoutine());
+        if (!_powerUpActive)
+        {
+            _uiManager.PowerUpCollected();
+            _missileOn = true;
+            _powerUpActive = true;
+            StartCoroutine(MissilePowerDownRoutine());
+        }
     }
 
     IEnumerator MissilePowerDownRoutine()
     {
         yield return new WaitForSeconds(5.0f);
         _missileOn = false;
+        _powerUpActive = false;
     }
     public void AddScore(int points)
     {
