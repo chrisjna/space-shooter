@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EnemyFast : MonoBehaviour
 {
@@ -13,6 +11,8 @@ public class EnemyFast : MonoBehaviour
     private Player _player;
     private Animator _anim;
     private AudioSource _audioSource;
+
+    private float _timer = 0;
     void Start()
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
@@ -30,19 +30,44 @@ public class EnemyFast : MonoBehaviour
         {
             _audioSource.clip = _explosionSoundClip;
         }
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        _timer += Time.deltaTime;
         float randomX = Random.Range(-8f, 8f);
         transform.Translate(Vector2.down * _speed * Time.deltaTime, Space.World);
-        
+
         if (transform.position.y < -5f)
         {
             transform.position = new Vector3(randomX, 7, 0);
         }
+
+        if (_timer > 2)
+        {
+            FireFastOuch();
+            _timer = 0;
+        }
     }
+
+    private void FireFastOuch()
+    {
+        if (_player != null)
+        {
+            Vector2 direction = _player.transform.position - transform.position;
+            if (Vector2.Angle(transform.up, direction) > 90)
+            {
+                GameObject bullet = Instantiate(_ouchPrefab, transform.position, Quaternion.identity);
+                Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+                direction.Normalize();
+                rb.velocity = direction * 5f;
+            }
+        }
+
+    }
+    
 
     private void OnTriggerEnter2D(Collider2D other)
     {

@@ -148,7 +148,6 @@ public class Player : MonoBehaviour
             return;
         }
         _alreadyHit = true;
-        Debug.Log(_invincibilityTimer);
         
         if (_shieldHealth >= 1)
         {

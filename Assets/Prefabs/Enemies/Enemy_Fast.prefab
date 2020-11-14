@@ -148,6 +148,8 @@ MonoBehaviour:
   _speed: 4
   _rotateSpeed: 20
   _explosionSoundClip: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
+  _ouchPrefab: {fileID: 6730215950459946921, guid: b47722d504f8fcb44acfd6f5c50f8929,
+    type: 3}
 --- !u!95 &-3290051125659844301
 Animator:
   serializedVersion: 3
@@ -178,9 +180,9 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
+  m_PlayOnAwake: 0
+  m_Volume: 0.76
+  m_Pitch: 2.5
   Loop: 0
   Mute: 0
   Spatialize: 0
