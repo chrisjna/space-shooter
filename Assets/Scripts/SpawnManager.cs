@@ -8,9 +8,10 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField] private GameObject _asteroidPrefab;
     [SerializeField] private GameObject _enemyContainer;
+    [SerializeField] private GameObject _asteroidPrefab;
     [SerializeField] private GameObject _enemyPrefab;
+    [SerializeField] private GameObject _enemyFastPrefab;
     [SerializeField] private GameObject[] powerups;
 
     private float _timer = 0;
@@ -46,11 +47,17 @@ public class SpawnManager : MonoBehaviour
         while (_stopSpawning == false)
         {
             Vector3 posToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
+            Vector3 posToSpawnFast = new Vector3(Random.Range(-8f, 8f), 8, 0);
+
             GameObject newEnemy = Instantiate(_asteroidPrefab, posToSpawn, Quaternion.identity);
+            GameObject newEnemyFast = Instantiate(_enemyFastPrefab, posToSpawnFast, Quaternion.identity);
+            
             newEnemy.transform.parent = _enemyContainer.transform;
+            newEnemyFast.transform.parent = _enemyContainer.transform;
+            
             if (_enemyIsDead && _timer > 20)
             {
-                Vector3 enemyToSpawn = new Vector3(Random.Range(-8f, 8f), 4, 0);
+                Vector3 enemyToSpawn = new Vector3(0, 8f, 0);
                 Instantiate(_enemyPrefab, enemyToSpawn, Quaternion.identity);
                 _enemyIsDead = false;
             }

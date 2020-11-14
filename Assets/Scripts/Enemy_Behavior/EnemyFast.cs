@@ -1,16 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class Asteroid : MonoBehaviour
+public class EnemyFast : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField] private float _speed = 4.0f;
+    [SerializeField] private float _speed = 5.0f;
     [SerializeField] private float _rotateSpeed = 20.0f;
-    Player _player;
-    private Animator _anim;
     [SerializeField] private AudioClip _explosionSoundClip;
+    [SerializeField] private GameObject _ouchPrefab;
+
+    private Player _player;
+    private Animator _anim;
     private AudioSource _audioSource;
     void Start()
     {
@@ -36,10 +37,10 @@ public class Asteroid : MonoBehaviour
     {
         float randomX = Random.Range(-8f, 8f);
         transform.Translate(Vector2.down * _speed * Time.deltaTime, Space.World);
-        transform.Rotate(Vector3.forward * _rotateSpeed * Time.deltaTime);
+        
         if (transform.position.y < -5f)
         {
-            transform.position = new Vector3(randomX, 7 ,0);
+            transform.position = new Vector3(randomX, 7, 0);
         }
     }
 

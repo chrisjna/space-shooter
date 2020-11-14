@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6730215950459946923}
   - component: {fileID: 6730215950459946924}
   - component: {fileID: 6730215950459946925}
-  - component: {fileID: 6028913714680867815}
+  - component: {fileID: 1277232946204844312}
   m_Layer: 0
   m_Name: Enemy_Ouch
   m_TagString: Enemy
@@ -131,7 +131,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &6028913714680867815
+--- !u!114 &1277232946204844312
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -140,6 +140,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 6730215950459946921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bec1e4bd9cc28d419f2a774c283167d, type: 3}
+  m_Script: {fileID: 11500000, guid: baa4a6e81eaf69b469e848e4963476c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

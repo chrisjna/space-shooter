@@ -18,12 +18,14 @@ public class Player : MonoBehaviour
 
     private bool _missileOn;
     private bool _isTripleShotActive = false;
+    private bool _powerUpActive = false;
+    private bool _alreadyHit = false;
     private float _ammoCount = Mathf.Infinity;
     private float _speedMultiplier = 2;
     private float _shieldHealth = 0;
     private float _canFire = -1f;
+    private float _invincibilityTimer = 0;
     private int _score = 0;
-    private bool _powerUpActive = false;
 
     private SpawnManager _spawnManager;
     private UIManager _uiManager;
@@ -63,6 +65,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        _invincibilityTimer += Time.deltaTime;
         CalculateMovement();
 
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
@@ -135,6 +138,18 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
+        if (_alreadyHit)
+        {
+            if (_invincibilityTimer > 3f)
+            {
+                _invincibilityTimer = 0;
+                _alreadyHit = false;
+            }
+            return;
+        }
+        _alreadyHit = true;
+        Debug.Log(_invincibilityTimer);
+        
         if (_shieldHealth >= 1)
         {
             if (_shieldVisualizer3.activeInHierarchy == true)
@@ -144,11 +159,12 @@ public class Player : MonoBehaviour
             }
             else if (_shieldVisualizer2.activeInHierarchy == true)
             {
-                _shieldVisualizer1.SetActive(true);
+               _shieldVisualizer1.SetActive(true);
                 _shieldVisualizer2.SetActive(false);
-            } else
+            }
+            else
             {
-                _shieldVisualizer1.SetActive(false);
+               _shieldVisualizer1.SetActive(false);
             }
             _shieldHealth--;
             return;
@@ -159,18 +175,20 @@ public class Player : MonoBehaviour
             _leftEngine.SetActive(true);
             _cameraManager.TriggerShake();
         }
-        if (_lives == 1){
+        if (_lives == 1)
+        {
             _rightEngine.SetActive(true);
             _cameraManager.TriggerShake();
         }
 
         _uiManager.UpdateLives(_lives);
 
-        if(_lives < 1)
+        if (_lives < 1)
         {
             _spawnManager.OnPlayerDeath();
             Destroy(this.gameObject);
         }
+
     }
 
     public void TripleShotActive()

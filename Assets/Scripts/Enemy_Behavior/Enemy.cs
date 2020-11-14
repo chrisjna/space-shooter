@@ -7,25 +7,23 @@ public class Enemy : MonoBehaviour
     [SerializeField] private int NumberOfProjectiles = 3;
     [SerializeField] private float BulletForce = 2f;
     [Range(0, 360)] [SerializeField] private float SpreadAngle = 20;
-   
     [SerializeField] private float hp = 25;
     [SerializeField] private GameObject _ouchPrefab;
-    private float _speed = 3.5f;
-    
-    private float latestDirectionChangeTime;
-    private readonly float directionChangeTime = 3f;
-    private Vector2 movementDirection;
-    private Vector2 movementPerSecond;
-    private float _timer = 5;
+    [SerializeField] private AudioClip _explosionSoundClip;
 
     private SpawnManager _spawnManager;
     private Animator _anim;
     private Collider2D _collider;
-
-    Player _player;
-
-    [SerializeField] private AudioClip _explosionSoundClip;
+    private Vector2 movementDirection;
+    private Vector2 movementPerSecond;
+    private Player _player;
     private AudioSource _audioSource;
+
+    private float _speed = 3.5f; 
+    private float latestDirectionChangeTime = 0f;
+    private readonly float directionChangeTime = 3f;
+    private float _timer = 5;
+    private float _timer2 = 0;
     private bool _isDead = false;
 
     // Start is called before the first frame update
@@ -35,16 +33,13 @@ public class Enemy : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         _collider = gameObject.GetComponent<Collider2D>();
-
-        latestDirectionChangeTime = 0f;
-        CalculateMovement();
+        _anim = GetComponent<Animator>();
 
         if (_spawnManager == null)
         {
             Debug.LogError("Spawn Manager is NULL");
         }
 
-        _anim = GetComponent<Animator>();
         if (_anim == null)
         {
             Debug.LogError("animator is null");
@@ -57,17 +52,22 @@ public class Enemy : MonoBehaviour
         {
             _audioSource.clip = _explosionSoundClip;
         }
+
+        CalculateMovement();
     }
 
     // Update is called once per frame
     void Update()
     {
+        _timer2 += Time.deltaTime;
+        
         if (_isDead)
         {
             _speed = 0;
         }
-        else
+        else if (_timer2 > 5f) 
         {
+            _collider.enabled = true;
             _timer += Time.deltaTime;
             if (Time.time - latestDirectionChangeTime > directionChangeTime)
             {
@@ -81,6 +81,10 @@ public class Enemy : MonoBehaviour
             }
             transform.position = new Vector2(Mathf.Clamp(transform.position.x + (movementPerSecond.x * Time.deltaTime), -8, 8),
                 Mathf.Clamp(transform.position.y + (movementPerSecond.y * Time.deltaTime), 4, 5));
+        } else
+        {
+            transform.Translate(Vector2.down * 0.8f * Time.deltaTime, Space.World);
+            _collider.enabled = false;
         }
     }
 

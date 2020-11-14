@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5252431031866605290}
   - component: {fileID: 6913509106984984598}
   - component: {fileID: 4003434619998014796}
-  - component: {fileID: 795346157802275427}
+  - component: {fileID: -7798176815177523740}
   m_Layer: 0
   m_Name: Asteroid
   m_TagString: Enemy
@@ -248,7 +248,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &795346157802275427
+--- !u!114 &-7798176815177523740
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -257,7 +257,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3090809611304909938}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10f9a19ad1912244db61acd08f6e095f, type: 3}
+  m_Script: {fileID: 11500000, guid: f548a85ec7fa31340b6c270c65ed047e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 4

@@ -570,9 +570,9 @@ GameObject:
   m_Component:
   - component: {fileID: 383382084}
   - component: {fileID: 383382083}
-  - component: {fileID: 383382082}
   - component: {fileID: 383382085}
   - component: {fileID: 383382086}
+  - component: {fileID: 383382082}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -589,13 +589,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 383382081}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 806eb055b9f227c429e9971da7552891, type: 3}
+  m_Script: {fileID: 11500000, guid: 6f48b6dd70ee3f8439d8c2ce896ce1d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 3.5
   _laserPrefab: {fileID: 23726299084610286, guid: ac0ef6b587f1cf440bb4c48f0790ebb1,
     type: 3}
-  _fireRate: 0.01
+  _fireRate: 0.5
   _lives: 3
   _tripleShotPrefab: {fileID: 1680476950836068059, guid: fe15d844d816a824799a773335c3efbe,
     type: 3}
@@ -607,7 +607,6 @@ MonoBehaviour:
   _thruster: {fileID: 1525090849}
   _boostOn: {fileID: 691144881}
   _laserSoundClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
-  _laserContainer: {fileID: 0}
 --- !u!212 &383382083
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1713,10 +1712,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b391a47c31be8744b9ef996a8252fa8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _enemyContainer: {fileID: 1943559105}
   _asteroidPrefab: {fileID: 3090809611304909938, guid: 1740d4546d8950141ac7fad0ab8cb893,
     type: 3}
-  _enemyContainer: {fileID: 1943559105}
   _enemyPrefab: {fileID: 7357391620188280767, guid: f79b39a2a0b20bc43bc63db5825230cf,
+    type: 3}
+  _enemyFastPrefab: {fileID: 804112317298218009, guid: c9d1fbe316322644b9bcd727d60f8ddf,
     type: 3}
   powerups:
   - {fileID: 8503726409995442899, guid: daac1c5f1461ce240bcb4d6c252e7ddb, type: 3}
@@ -2369,7 +2370,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2026260277}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bfa57ec094185a542b4bf75d7288c2b3, type: 3}
+  m_Script: {fileID: 11500000, guid: 148ebb8dcfcffb24f82b86d5787f72d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2037365108
