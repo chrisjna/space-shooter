@@ -65,7 +65,16 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _invincibilityTimer += Time.deltaTime;
+        if (_alreadyHit)
+        {
+            _invincibilityTimer += Time.deltaTime;
+            if (_invincibilityTimer > 1.5f)
+            {
+                _alreadyHit = false;
+                _invincibilityTimer = 0;
+            }
+        }
+        
         CalculateMovement();
 
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
@@ -109,7 +118,7 @@ public class Player : MonoBehaviour
         if (_ammoCount > 0)
         {
             _ammoCount--;
-            _canFire = Time.time + _fireRate;
+            _canFire = Time.deltaTime + _fireRate;
 
             if (_isTripleShotActive == true)
             {
@@ -140,15 +149,9 @@ public class Player : MonoBehaviour
     {
         if (_alreadyHit)
         {
-            if (_invincibilityTimer > 3f)
-            {
-                _invincibilityTimer = 0;
-                _alreadyHit = false;
-            }
             return;
         }
         _alreadyHit = true;
-        
         if (_shieldHealth >= 1)
         {
             if (_shieldVisualizer3.activeInHierarchy == true)

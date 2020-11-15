@@ -11,6 +11,7 @@ public class EnemyFast : MonoBehaviour
     private Player _player;
     private Animator _anim;
     private AudioSource _audioSource;
+    private Collider2D _collider;
 
     private float _timer = 0;
     void Start()
@@ -18,6 +19,8 @@ public class EnemyFast : MonoBehaviour
         _player = GameObject.Find("Player").GetComponent<Player>();
         _anim = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();
+        _collider = GetComponent<Collider2D>();
+
         if (_anim == null)
         {
             Debug.LogError("animator is null");
@@ -42,13 +45,16 @@ public class EnemyFast : MonoBehaviour
 
         if (transform.position.y < -5f)
         {
-            transform.position = new Vector3(randomX, 7, 0);
+            transform.position = new Vector3(randomX, 7.5f, 0);
         }
 
-        if (_timer > 2)
+        if (_timer > 1.5)
         {
-            FireFastOuch();
-            _timer = 0;
+            if (_collider.isActiveAndEnabled)
+            {
+                FireFastOuch();
+                _timer = 0;
+            }
         }
     }
 
@@ -57,12 +63,13 @@ public class EnemyFast : MonoBehaviour
         if (_player != null)
         {
             Vector2 direction = _player.transform.position - transform.position;
-            if (Vector2.Angle(transform.up, direction) > 90)
+            float vecAngle = Vector2.Angle(transform.up, direction);
+            if (vecAngle > 150f && vecAngle < 190f)
             {
-                GameObject bullet = Instantiate(_ouchPrefab, transform.position, Quaternion.identity);
+                GameObject bullet = Instantiate(_ouchPrefab, transform.position + new Vector3(0, -0.6f, 0), Quaternion.identity);
                 Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
                 direction.Normalize();
-                rb.velocity = direction * 5f;
+                rb.velocity = direction * 4f;
             }
         }
 
@@ -82,7 +89,7 @@ public class EnemyFast : MonoBehaviour
             _audioSource.Play();
             _speed = 0;
             Destroy(this.gameObject, 2.1f);
-            this.gameObject.GetComponent<Collider2D>().enabled = false;
+            _collider.enabled = false;
         }
 
         if (other.tag == "Laser")
@@ -95,7 +102,7 @@ public class EnemyFast : MonoBehaviour
                 _audioSource.Play();
                 _speed = 0;
                 Destroy(this.gameObject, 2.1f);
-                this.gameObject.GetComponent<Collider2D>().enabled = false;
+                _collider.enabled = false;
             }
         }
     }
