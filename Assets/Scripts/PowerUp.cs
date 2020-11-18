@@ -47,6 +47,9 @@ public class PowerUp : MonoBehaviour
                     case 4:
                         player.MissileActive();
                         break;
+                    case 5:
+                        player.JammerActive();
+                        break;
                     default:
                         Debug.Log("Powerup broke");
                         break;

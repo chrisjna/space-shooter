@@ -12,6 +12,7 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private GameObject _asteroidPrefab;
     [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private GameObject _enemyFastPrefab;
+    [SerializeField] private GameObject _enemyMoverPrefab;
     [SerializeField] private GameObject[] powerups;
 
     private float _timer = 0;
@@ -47,11 +48,13 @@ public class SpawnManager : MonoBehaviour
         while (_stopSpawning == false)
         {
             Vector3 posToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
-            Vector3 posToSpawnFast = new Vector3(Random.Range(-8f, 8f), 8, 0);
+            Vector3 posToSpawnFast = new Vector3(Random.Range(-8f, 8f), 9, 0);
+            Vector3 posToSpawnMover = new Vector3(Random.Range(-8f, 8f), 9, 0);
 
             GameObject newEnemy = Instantiate(_asteroidPrefab, posToSpawn, Quaternion.identity);
             GameObject newEnemyFast = Instantiate(_enemyFastPrefab, posToSpawnFast, Quaternion.identity);
-            
+            GameObject newEnemyMover = Instantiate(_enemyMoverPrefab, posToSpawnMover, Quaternion.identity);
+
             newEnemy.transform.parent = _enemyContainer.transform;
             newEnemyFast.transform.parent = _enemyContainer.transform;
             
@@ -65,22 +68,34 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
+    /*
+     * Recommendations for powerups id
+     * 1 - 
+     * 2 -
+     * 3 -
+     * 4 - 
+     * 5 -
+     */
     IEnumerator SpawnPowerUpRoutine()
     {
         while (_stopSpawning == false)
         {
             Vector3 postToSpawn = new Vector3(Random.Range(-.8f, 8f), 7, 0);
             int randomPowerUp = Random.Range(0, 5);
-            if (randomPowerUp == 5 && _timer2 > 30)
+
+            if (randomPowerUp != 4)
+            {
+                Instantiate(powerups[randomPowerUp], postToSpawn, Quaternion.identity);
+                yield return new WaitForSeconds(Random.Range(4, 8));
+            }
+            else if (randomPowerUp == 4 && _timer2 > 30)
             {
                 Instantiate(powerups[4], postToSpawn, Quaternion.identity);
                 _timer = 0;
-                yield return new WaitForSeconds(Random.Range(3, 8));
-            }
-            else
+                yield return new WaitForSeconds(Random.Range(4, 8));
+            } else
             {
-                Instantiate(powerups[randomPowerUp], postToSpawn, Quaternion.identity);
-                yield return new WaitForSeconds(Random.Range(3, 8));
+                yield return new WaitForSeconds(1);
             }
         }
     }

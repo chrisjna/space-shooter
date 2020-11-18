@@ -20,6 +20,7 @@ public class Player : MonoBehaviour
     private bool _isTripleShotActive = false;
     private bool _powerUpActive = false;
     private bool _alreadyHit = false;
+    private bool _jammerActive = false;
     private float _ammoCount = Mathf.Infinity;
     private float _speedMultiplier = 2;
     private float _shieldHealth = 0;
@@ -222,7 +223,6 @@ public class Player : MonoBehaviour
             StartCoroutine(SpeedBoostPowerDownRoutine());
         }
     }
-
     IEnumerator SpeedBoostPowerDownRoutine()
     {
         yield return new WaitForSeconds(5.0f);
@@ -231,6 +231,20 @@ public class Player : MonoBehaviour
         _powerUpActive = false;
     }
 
+    public void JammerActive()
+    {
+        if (!_jammerActive)
+        {
+            _ammoCount = 0;
+            StartCoroutine(JammerActivePowerDownRoutine());
+        }
+    }
+    
+    IEnumerator JammerActivePowerDownRoutine()
+    {
+        yield return new WaitForSeconds(5.0f);
+        _ammoCount = Mathf.Infinity;
+    }
     public void ShieldsActive()
     {
         if (_shieldHealth == 2)

@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class EnemyFast : MonoBehaviour
+public class EnemyMover : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField] private float _speed = 5.0f;
@@ -73,7 +75,7 @@ public class EnemyFast : MonoBehaviour
         }
 
     }
-    
+
 
     private void OnTriggerEnter2D(Collider2D other)
     {
