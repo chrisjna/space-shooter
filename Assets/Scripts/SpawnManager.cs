@@ -49,7 +49,7 @@ public class SpawnManager : MonoBehaviour
         {
             Vector3 posToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
             Vector3 posToSpawnFast = new Vector3(Random.Range(-8f, 8f), 9, 0);
-            Vector3 posToSpawnMover = new Vector3(Random.Range(-8f, 8f), 9, 0);
+            Vector3 posToSpawnMover = new Vector3(0, 9, 0);
 
             GameObject newEnemy = Instantiate(_asteroidPrefab, posToSpawn, Quaternion.identity);
             GameObject newEnemyFast = Instantiate(_enemyFastPrefab, posToSpawnFast, Quaternion.identity);
@@ -57,6 +57,7 @@ public class SpawnManager : MonoBehaviour
 
             newEnemy.transform.parent = _enemyContainer.transform;
             newEnemyFast.transform.parent = _enemyContainer.transform;
+            newEnemyMover.transform.parent = _enemyContainer.transform;
             
             if (_enemyIsDead && _timer > 20)
             {
@@ -91,7 +92,7 @@ public class SpawnManager : MonoBehaviour
             else if (randomPowerUp == 4 && _timer2 > 30)
             {
                 Instantiate(powerups[4], postToSpawn, Quaternion.identity);
-                _timer = 0;
+                _timer2 = 0;
                 yield return new WaitForSeconds(Random.Range(4, 8));
             } else
             {

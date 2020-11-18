@@ -4,23 +4,30 @@ using UnityEngine;
 
 public class EnemyMover : MonoBehaviour
 {
-    // Start is called before the first frame update
-    [SerializeField] private float _speed = 5.0f;
+    [SerializeField] private float _speed = 1.0f;
     [SerializeField] private AudioClip _explosionSoundClip;
-    [SerializeField] private GameObject _ouchPrefab;
+    [SerializeField] private GameObject _shieldVisualizer;
 
     private Player _player;
     private Animator _anim;
     private AudioSource _audioSource;
     private Collider2D _collider;
 
-    private float _timer = 0;
+    float frequency = 0.5f; // Speed of sine movement
+    float magnitude = 5f; //  Size of sine movement
+    Vector3 pos;
+    Vector3 axis;
+
+    private float _lives = 2;
+    private bool _isAlive = true;
+
     void Start()
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
         _anim = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();
         _collider = GetComponent<Collider2D>();
+        _shieldVisualizer.SetActive(true);
 
         if (_anim == null)
         {
@@ -34,46 +41,27 @@ public class EnemyMover : MonoBehaviour
         {
             _audioSource.clip = _explosionSoundClip;
         }
-
+        pos = transform.position;
+        axis = transform.right;
     }
 
     // Update is called once per frame
     void Update()
     {
-        _timer += Time.deltaTime;
-        float randomX = Random.Range(-8f, 8f);
-        transform.Translate(Vector2.down * _speed * Time.deltaTime, Space.World);
-
-        if (transform.position.y < -5f)
+        if (_isAlive)
         {
-            transform.position = new Vector3(randomX, 7.5f, 0);
-        }
-
-        if (_timer > 1.5)
-        {
-            if (_collider.isActiveAndEnabled)
-            {
-                FireFastOuch();
-                _timer = 0;
-            }
+            CalculateMove();
         }
     }
 
-    private void FireFastOuch()
+    private void CalculateMove()
     {
-        if (_player != null)
+        pos += Vector3.down * Time.deltaTime * _speed;
+        transform.position = pos + axis * Mathf.Sin(Time.time * frequency) * magnitude;
+        if (transform.position.y < -5f)
         {
-            Vector2 direction = _player.transform.position - transform.position;
-            float vecAngle = Vector2.Angle(transform.up, direction);
-            if (vecAngle > 150f && vecAngle < 190f)
-            {
-                GameObject bullet = Instantiate(_ouchPrefab, transform.position + new Vector3(0, -0.6f, 0), Quaternion.identity);
-                Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-                direction.Normalize();
-                rb.velocity = direction * 4f;
-            }
+            Destroy(this.gameObject);
         }
-
     }
 
 
@@ -86,11 +74,18 @@ public class EnemyMover : MonoBehaviour
             {
                 player.Damage();
             }
-            _anim.SetTrigger("OnAsteroidDeath");
-            _audioSource.Play();
-            _speed = 0;
-            Destroy(this.gameObject, 2.1f);
-            _collider.enabled = false;
+            if (_lives < 2)
+            {
+                _isAlive = false;
+                _anim.SetTrigger("OnAsteroidDeath");
+                _audioSource.Play();
+                Destroy(this.gameObject, 2.1f);
+                _collider.enabled = false;
+            } else
+            {
+                _shieldVisualizer.SetActive(false);
+                _lives--;
+            }
         }
 
         if (other.tag == "Laser")
@@ -98,12 +93,20 @@ public class EnemyMover : MonoBehaviour
             Destroy(other.gameObject);
             if (_player != null)
             {
-                _player.AddScore(10);
-                _anim.SetTrigger("OnAsteroidDeath");
-                _audioSource.Play();
-                _speed = 0;
-                Destroy(this.gameObject, 2.1f);
-                _collider.enabled = false;
+                if (_lives < 2)
+                {
+                    _isAlive = false;
+                    _player.AddScore(10);
+                    _anim.SetTrigger("OnAsteroidDeath");
+                    _audioSource.Play();
+                    Destroy(this.gameObject, 2.1f);
+                    _collider.enabled = false;
+                }
+                else
+                {
+                    _shieldVisualizer.SetActive(false);
+                    _lives--;
+                }
             }
         }
     }

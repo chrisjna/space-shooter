@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1180106185489556584
 Transform:
   m_ObjectHideFlags: 0
@@ -248,8 +248,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 5
   _explosionSoundClip: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
-  _ouchPrefab: {fileID: 6730215950459946921, guid: b47722d504f8fcb44acfd6f5c50f8929,
-    type: 3}
+  _shieldVisualizer: {fileID: 18878503180777884}
 --- !u!82 &-6908092572291703863
 AudioSource:
   m_ObjectHideFlags: 0
