@@ -74,7 +74,7 @@ public class Enemy : MonoBehaviour
                 latestDirectionChangeTime = Time.time;
                 CalculateMovement();
             }
-            if (_timer > 12)
+            if (_timer > 6)
             {
                 FireOuch();
                 _timer = 0;
@@ -134,7 +134,6 @@ public class Enemy : MonoBehaviour
                 _isDead = true;
                 _player.AddScore(100);
                 _timer = 0;
-                _spawnManager.EnemyDied();
                 _collider.enabled = false;
                 _anim.SetTrigger("OnEnemyDeath");
                 _audioSource.Play();

@@ -44,10 +44,10 @@ public class EnemyFast : MonoBehaviour
 
         if (transform.position.y < -5f)
         {
-            transform.position = new Vector3(randomX, 7.5f, 0);
+            Destroy(this.gameObject);
         }
 
-        if (_timer > 1.5)
+        if (_timer > 0.8f)
         {
             if (_collider.isActiveAndEnabled)
             {
@@ -63,12 +63,12 @@ public class EnemyFast : MonoBehaviour
         {
             Vector2 direction = _player.transform.position - transform.position;
             float vecAngle = Vector2.Angle(transform.up, direction);
-            if (vecAngle > 150f && vecAngle < 190f)
+            if (vecAngle > 125f && vecAngle < 190f)
             {
                 GameObject bullet = Instantiate(_ouchPrefab, transform.position + new Vector3(0, -0.6f, 0), Quaternion.identity);
                 Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
                 direction.Normalize();
-                rb.velocity = direction * 4f;
+                rb.velocity = direction * 6f;
             }
         }
 

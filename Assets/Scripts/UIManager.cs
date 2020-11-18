@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Text _startText;
     [SerializeField] private Text _ammo;
     [SerializeField] private Image _timer;
+    [SerializeField] private Text _wave;
     private GameManager _gameManager;
     
     // Start is called before the first frame update
@@ -25,6 +26,7 @@ public class UIManager : MonoBehaviour
         _restartText.gameObject.SetActive(false);
         _startText.gameObject.SetActive(true);
         _timer.gameObject.SetActive(false);
+        _wave.gameObject.SetActive(false);
 
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
         if (_gameManager == null)
@@ -60,6 +62,17 @@ public class UIManager : MonoBehaviour
         {
             GameOverSequence();
         }
+    }
+
+    public void UpdateWave( int wave, float waitTimer)
+    {
+        _wave.text = "Wave: " + wave.ToString();
+        _wave.gameObject.SetActive(true);
+    }
+
+    public void WaveIsDone()
+    {
+        _wave.gameObject.SetActive(false);
     }
 
     public void PowerUpCollected()

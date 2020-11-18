@@ -551,7 +551,12 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Get Ready...
+  m_Text: 'Get Ready...
+
+
+    "C" - Attract Powerup
+
+    "L SHIFT" - Thrusters'
 --- !u!222 &370670609
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1071,6 +1076,7 @@ RectTransform:
   - {fileID: 370670607}
   - {fileID: 1684931508}
   - {fileID: 1916352027}
+  - {fileID: 1042573144}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1103,6 +1109,85 @@ MonoBehaviour:
   _startText: {fileID: 370670608}
   _ammo: {fileID: 1684931509}
   _timer: {fileID: 1916352028}
+  _wave: {fileID: 1042573142}
+--- !u!1 &1042573141
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1042573144}
+  - component: {fileID: 1042573143}
+  - component: {fileID: 1042573142}
+  m_Layer: 5
+  m_Name: Wave
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1042573142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1042573141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 0.9858491, b: 0.9858491, a: 1}
+  m_RaycastTarget: 1
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 36
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 2
+    m_MaxSize: 40
+    m_Alignment: 1
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
+    m_LineSpacing: 1
+  m_Text: 'Wave: '
+--- !u!222 &1042573143
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1042573141}
+  m_CullTransparentMesh: 0
+--- !u!224 &1042573144
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1042573141}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1015936473}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 160, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1058536032
 GameObject:
   m_ObjectHideFlags: 0
@@ -1713,14 +1798,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyContainer: {fileID: 1943559105}
-  _asteroidPrefab: {fileID: 3090809611304909938, guid: 1740d4546d8950141ac7fad0ab8cb893,
-    type: 3}
-  _enemyPrefab: {fileID: 7357391620188280767, guid: f79b39a2a0b20bc43bc63db5825230cf,
-    type: 3}
-  _enemyFastPrefab: {fileID: 1113021623730358466, guid: b89baa7342238e047b7d75a63504a1a0,
-    type: 3}
-  _enemyMoverPrefab: {fileID: 6045171251943515470, guid: 7d99310e6e014b34586939932690c3dd,
-    type: 3}
   powerups:
   - {fileID: 8503726409995442899, guid: daac1c5f1461ce240bcb4d6c252e7ddb, type: 3}
   - {fileID: 5302172682557908763, guid: 714f0ed06c92e7b489d0f23065930a3f, type: 3}
@@ -1728,6 +1805,8 @@ MonoBehaviour:
   - {fileID: 7990952207780118495, guid: ffe36a7608ba47049bb4aac11af3caa1, type: 3}
   - {fileID: 6004376701708285751, guid: bac9bcd2b8fe58d4d876707f82ca4820, type: 3}
   - {fileID: 3283304089087690926, guid: 5427fcb833902724ea682031ac2c4b79, type: 3}
+  waves: []
+  timeBetweenWaves: 4
 --- !u!4 &1609940374
 Transform:
   m_ObjectHideFlags: 0

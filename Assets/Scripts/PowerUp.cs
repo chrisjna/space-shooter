@@ -8,9 +8,11 @@ public class PowerUp : MonoBehaviour
     private float _speed = 3.0f;
     [SerializeField]
     private int powerupID = 0;
+
+    private Player _player;
     void Start()
     {
-        
+        _player = GameObject.Find("Player").GetComponent<Player>();
     }
 
     // Update is called once per frame
@@ -20,6 +22,14 @@ public class PowerUp : MonoBehaviour
         if (transform.position.y < -4.5f)
         {
             Destroy(this.gameObject);
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            Rigidbody2D rb = this.gameObject.GetComponent<Rigidbody2D>();
+            Vector2 direction = _player.transform.position - transform.position;
+            direction.Normalize();
+            rb.velocity = direction * 3f;
         }
     }
 

@@ -35,12 +35,11 @@ public class Asteroid : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float randomX = Random.Range(-8f, 8f);
         transform.Translate(Vector2.down * _speed * Time.deltaTime, Space.World);
         transform.Rotate(Vector3.forward * _rotateSpeed * Time.deltaTime);
         if (transform.position.y < -5f)
         {
-            transform.position = new Vector3(randomX, 7 ,0);
+            Destroy(this.gameObject);
         }
     }
 

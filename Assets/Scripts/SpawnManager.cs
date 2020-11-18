@@ -6,67 +6,128 @@ using System.Threading;
 using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
-{
-    // Start is called before the first frame update
-    [SerializeField] private GameObject _enemyContainer;
-    [SerializeField] private GameObject _asteroidPrefab;
-    [SerializeField] private GameObject _enemyPrefab;
-    [SerializeField] private GameObject _enemyFastPrefab;
-    [SerializeField] private GameObject _enemyMoverPrefab;
-    [SerializeField] private GameObject[] powerups;
-
-    private float _timer = 0;
-    private float _timer2 = 0;
-
+{   
+    private float _timerPowerUp = 0;
     private bool _stopSpawning = false;
-    private bool _enemyIsDead = true;
+    private UIManager _uiManager;
+
+    [SerializeField] private GameObject _enemyContainer;
+    [SerializeField] private GameObject[] powerups;
+    public enum SpawnState { SPAWNING, WAITING, COUNTING }
+    [System.Serializable]
+    public class Wave
+    {
+        public string name;
+        public Transform enemy;
+        public int count;
+        public float rate;
+    }
+    public Wave[] waves;
+    private int nextWave = 0;
+
+    public float timeBetweenWaves = 5f;
+    private float waveCountdown;
+
+    private float searchCountdown = 1f;
+
+    private SpawnState state = SpawnState.COUNTING;
+
     void Start()
     {
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        waveCountdown = timeBetweenWaves;
         Invoke("Spawn", 3);
     }
 
-    // Update is called once per frame
-    void Spawn()
-    {
-        StartCoroutine(SpawnEnemyRoutine());
-        StartCoroutine(SpawnPowerUpRoutine());
-    }
     void Update()
     {
-        _timer2 += Time.deltaTime;
-        if (_enemyIsDead)
+        if (!_stopSpawning)
         {
-            _timer += Time.deltaTime;
-        } else
-        {
-            _timer = 0;
+            _timerPowerUp += Time.deltaTime;
+
+            if (state == SpawnState.WAITING)
+            {
+                if (!EnemyIsAlive())
+                {
+                    WaveCompleted();
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            if (waveCountdown <= 0)
+            {
+                if (state != SpawnState.SPAWNING)
+                {
+                    _uiManager.WaveIsDone();
+                    StartCoroutine(SpawnWave(waves[nextWave]));
+                }
+            }
+            else
+            {
+                waveCountdown -= Time.deltaTime;
+            }
         }
     }
 
-    IEnumerator SpawnEnemyRoutine()
+    void Spawn()
     {
-        while (_stopSpawning == false)
+        StartCoroutine(SpawnPowerUpRoutine());
+    }
+    void WaveCompleted()
+    {
+        Debug.Log("Wave Completed");
+        state = SpawnState.COUNTING;
+        waveCountdown = timeBetweenWaves;
+
+        if (nextWave + 1 > waves.Length - 1)
         {
-            Vector3 posToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
-            Vector3 posToSpawnFast = new Vector3(Random.Range(-8f, 8f), 9, 0);
-            Vector3 posToSpawnMover = new Vector3(0, 9, 0);
-
-            GameObject newEnemy = Instantiate(_asteroidPrefab, posToSpawn, Quaternion.identity);
-            GameObject newEnemyFast = Instantiate(_enemyFastPrefab, posToSpawnFast, Quaternion.identity);
-            GameObject newEnemyMover = Instantiate(_enemyMoverPrefab, posToSpawnMover, Quaternion.identity);
-
-            newEnemy.transform.parent = _enemyContainer.transform;
-            newEnemyFast.transform.parent = _enemyContainer.transform;
-            newEnemyMover.transform.parent = _enemyContainer.transform;
-            
-            if (_enemyIsDead && _timer > 20)
-            {
-                Vector3 enemyToSpawn = new Vector3(0, 8f, 0);
-                Instantiate(_enemyPrefab, enemyToSpawn, Quaternion.identity);
-                _enemyIsDead = false;
-            }
-            yield return new WaitForSeconds(5.0f);
+            nextWave = 0;
+            _uiManager.UpdateWave(nextWave, timeBetweenWaves);
+            Debug.Log("loop");
         }
+
+        else
+        {
+            nextWave++;
+            _uiManager.UpdateWave(nextWave, timeBetweenWaves);
+        }
+    }
+    bool EnemyIsAlive()
+    {
+        searchCountdown -= Time.deltaTime;
+        if (searchCountdown <= 0f)
+        {
+            searchCountdown = 1f;
+            if (GameObject.FindGameObjectWithTag("Enemy") == null)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    IEnumerator SpawnWave(Wave _wave)
+    {
+        state = SpawnState.SPAWNING;
+
+        // Spawn
+        for (int i = 0; i < _wave.count; i++)
+        {
+            SpawnEnemy(_wave.enemy);
+            yield return new WaitForSeconds(1f / _wave.rate);
+        }
+        state = SpawnState.WAITING;
+
+        yield break;
+    }
+
+    void SpawnEnemy(Transform _enemy)
+    {
+        Vector3 posToSpawn = new Vector3(Random.Range(-8f, 8f), 9, 0);
+        Instantiate(_enemy, posToSpawn, Quaternion.identity);
     }
 
     /*
@@ -82,17 +143,17 @@ public class SpawnManager : MonoBehaviour
         while (_stopSpawning == false)
         {
             Vector3 postToSpawn = new Vector3(Random.Range(-.8f, 8f), 7, 0);
-            int randomPowerUp = Random.Range(0, 5);
+            int randomPowerUp = Random.Range(0,6);
 
             if (randomPowerUp != 4)
             {
                 Instantiate(powerups[randomPowerUp], postToSpawn, Quaternion.identity);
                 yield return new WaitForSeconds(Random.Range(4, 8));
             }
-            else if (randomPowerUp == 4 && _timer2 > 30)
+            else if (randomPowerUp == 4 && _timerPowerUp > 30)
             {
                 Instantiate(powerups[4], postToSpawn, Quaternion.identity);
-                _timer2 = 0;
+                _timerPowerUp = 0;
                 yield return new WaitForSeconds(Random.Range(4, 8));
             } else
             {
@@ -103,10 +164,5 @@ public class SpawnManager : MonoBehaviour
     public void OnPlayerDeath()
     {
         _stopSpawning = true;
-    }
-
-    public void EnemyDied()
-    {
-        _enemyIsDead = true;
     }
 }

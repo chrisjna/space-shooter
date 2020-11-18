@@ -13,7 +13,7 @@ public class EnemyMover : MonoBehaviour
     private AudioSource _audioSource;
     private Collider2D _collider;
 
-    float frequency = 0.5f; // Speed of sine movement
+    float frequency = 1.5f; // Speed of sine movement
     float magnitude = 5f; //  Size of sine movement
     Vector3 pos;
     Vector3 axis;
