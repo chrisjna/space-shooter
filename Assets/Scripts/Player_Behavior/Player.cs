@@ -15,8 +15,10 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject _thruster;
     [SerializeField] private GameObject _boostOn;
     [SerializeField] private AudioClip _laserSoundClip;
+    [SerializeField] private GameObject _homingOnPrefab;
 
-    private bool _missileOn;
+    private bool _missileOn = false;
+    [SerializeField]  private bool _homingOn = false;
     private bool _isTripleShotActive = false;
     private bool _powerUpActive = false;
     private bool _alreadyHit = false;
@@ -32,7 +34,6 @@ public class Player : MonoBehaviour
     private UIManager _uiManager;
     private AudioSource _audioSource;
     private ShakeBehavior _cameraManager;
-
     void Start()
     {
         transform.position = new Vector3(0, -3, 0);
@@ -121,11 +122,11 @@ public class Player : MonoBehaviour
             _ammoCount--;
             _canFire = Time.deltaTime + _fireRate;
 
-            if (_isTripleShotActive == true)
+            if (_isTripleShotActive)
             {
                 Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
             }
-            else if (_missileOn == true)
+            else if (_missileOn)
             {
                 float angleStep = 120 / 5;
                 float centeringOffset = (120 / 2) - (angleStep / 2);                                                                                                                       //centered on the mouse cursor
@@ -137,6 +138,9 @@ public class Player : MonoBehaviour
                     Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
                     rb.AddForce(bullet.transform.up * -1.0f * 1f, ForceMode2D.Impulse);
                 }
+            } else if (_homingOn)
+            {
+                Instantiate(_homingOnPrefab, transform.position + new Vector3(0, 0.8f, 0), Quaternion.identity);
             } else
             {
                 Instantiate(_laserPrefab, transform.position + new Vector3(0, 0.8f, 0), Quaternion.identity);
@@ -296,6 +300,24 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(5.0f);
         _missileOn = false;
+        _powerUpActive = false;
+    }
+
+    public void HomingActive()
+    {
+        if (!_powerUpActive)
+        {
+            _uiManager.PowerUpCollected();
+            _homingOn = true;
+            _powerUpActive = true;
+            StartCoroutine(HomingActivePowerDownRoutine());
+        }
+    }
+
+    IEnumerator HomingActivePowerDownRoutine()
+    {
+        yield return new WaitForSeconds(5.0f);
+        _homingOn = false;
         _powerUpActive = false;
     }
     public void AddScore(int points)

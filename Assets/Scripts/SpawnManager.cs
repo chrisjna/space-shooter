@@ -13,6 +13,8 @@ public class SpawnManager : MonoBehaviour
 
     [SerializeField] private GameObject _enemyContainer;
     [SerializeField] private GameObject[] powerups;
+
+    // credit to Brackeys Youtube start
     public enum SpawnState { SPAWNING, WAITING, COUNTING }
     [System.Serializable]
     public class Wave
@@ -129,7 +131,7 @@ public class SpawnManager : MonoBehaviour
         Vector3 posToSpawn = new Vector3(Random.Range(-8f, 8f), 9, 0);
         Instantiate(_enemy, posToSpawn, Quaternion.identity);
     }
-
+    // END
     /*
      * Recommendations for powerups id
      * 1 - 
@@ -143,7 +145,7 @@ public class SpawnManager : MonoBehaviour
         while (_stopSpawning == false)
         {
             Vector3 postToSpawn = new Vector3(Random.Range(-.8f, 8f), 7, 0);
-            int randomPowerUp = Random.Range(0,6);
+            int randomPowerUp = Random.Range(0,7);
 
             if (randomPowerUp != 4)
             {

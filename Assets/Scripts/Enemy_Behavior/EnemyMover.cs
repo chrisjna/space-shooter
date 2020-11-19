@@ -76,6 +76,7 @@ public class EnemyMover : MonoBehaviour
             }
             if (_lives < 2)
             {
+                this.gameObject.tag = "Untagged";
                 _isAlive = false;
                 _anim.SetTrigger("OnAsteroidDeath");
                 _audioSource.Play();
@@ -95,6 +96,7 @@ public class EnemyMover : MonoBehaviour
             {
                 if (_lives < 2)
                 {
+                    this.gameObject.tag = "Untagged";
                     _isAlive = false;
                     _player.AddScore(10);
                     _anim.SetTrigger("OnAsteroidDeath");

@@ -84,6 +84,7 @@ public class EnemyFast : MonoBehaviour
             {
                 player.Damage();
             }
+            this.gameObject.tag = "Untagged";
             _anim.SetTrigger("OnAsteroidDeath");
             _audioSource.Play();
             _speed = 0;
@@ -97,6 +98,7 @@ public class EnemyFast : MonoBehaviour
             if (_player != null)
             {
                 _player.AddScore(10);
+                this.gameObject.tag = "Untagged";
                 _anim.SetTrigger("OnAsteroidDeath");
                 _audioSource.Play();
                 _speed = 0;

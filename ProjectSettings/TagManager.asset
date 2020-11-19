@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Laser
   - Enemy
+  - Enemy_Ouch
   layers:
   - Default
   - TransparentFX

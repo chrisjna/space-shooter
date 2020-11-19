@@ -60,6 +60,9 @@ public class PowerUp : MonoBehaviour
                     case 5:
                         player.JammerActive();
                         break;
+                    case 6:
+                        player.HomingActive();
+                        break;
                     default:
                         Debug.Log("Powerup broke");
                         break;

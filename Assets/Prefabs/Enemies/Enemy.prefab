@@ -260,9 +260,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 576d219a6a9f48a429a318ebb15a0394, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NumberOfProjectiles: 3
-  BulletForce: 2
-  SpreadAngle: 20
+  NumberOfProjectiles: 10
+  BulletForce: 3
+  SpreadAngle: 45
   hp: 25
   _ouchPrefab: {fileID: 6730215950459946921, guid: b47722d504f8fcb44acfd6f5c50f8929,
     type: 3}
