@@ -614,7 +614,7 @@ MonoBehaviour:
   _laserSoundClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
   _homingOnPrefab: {fileID: 8264873167385224540, guid: 06e5aef98aeccb1429fa0fddf9cae39a,
     type: 3}
-  _homingOn: 1
+  _homingOn: 0
 --- !u!212 &383382083
 SpriteRenderer:
   m_ObjectHideFlags: 0
